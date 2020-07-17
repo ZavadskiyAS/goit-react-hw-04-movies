@@ -7,12 +7,12 @@ class HomePage extends Component {
     }
     render() {
         const { movies } = this.state;
-        return {
+        return (
             <div>
                 <h2>Trending today</h2>
                 <MoviesList movies={movies} />
             <div/>
-        };
+        );
     }
 }
 
