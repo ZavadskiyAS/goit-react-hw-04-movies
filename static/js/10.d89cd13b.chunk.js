@@ -1,0 +1,2 @@
+(this.webpackJsonplesson_4=this.webpackJsonplesson_4||[]).push([[10],{73:function(e,n,t){"use strict";t.r(n);var a=t(0),s=t.n(a);n.default=function(){return s.a.createElement("h1",{style:{textAlign:"center"}},"Sorry, page not found",s.a.createElement("span",{role:"img","arial-label":"emoji"},"=^_^="))}}}]);
+//# sourceMappingURL=10.d89cd13b.chunk.js.map
