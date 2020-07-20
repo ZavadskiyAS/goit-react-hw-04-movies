@@ -5,7 +5,7 @@ import Loader from '../pages/Loader';
 import styles from './MoviesPage.module.css';
 
 const MoviesPageList = lazy(() =>
-  import('../pages/MoviesPageList' /* webpackChunkName: 'Movies-Page-List' */),
+  import('../pages/MoviesPageList'),
 );
 
 class MoviesPage extends Component {
@@ -27,8 +27,6 @@ class MoviesPage extends Component {
 
   getQueryMovies = async () => {
     try {
-      // const parsed = queryString.parse(this.props.history.location.search);
-      // const query = parsed.query;
       const queryMovies = await fetchQueryMovies(
         this.state.query,
       ).then(result => this.setState({ queryMovies: result.data.results }));

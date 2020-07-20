@@ -2,26 +2,24 @@ import React, { lazy, Suspense } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import Nav from './components/navigation/Nav';
 import Loader from './components/pages/Loader';
-// import styles from './App.module.css';
+
 
 const HomePage = lazy(() =>
-  import('./components/homePage/HomePage' /* webpackChunkName: 'Home-Page' */),
+  import('./components/homePage/HomePage'),
 );
 
 const MovieDetailsPage = lazy(() =>
   import(
-    './components/movieDetailsPage/MovieDetailsPage' /* webpackChunkName: 'Movie-Details-Page' */
-  ),
+    './components/movieDetailsPage/MovieDetailsPage'),
 );
 
 const MoviesPage = lazy(() =>
   import(
-    './components/moviesPage/MoviesPage' /* webpackChunkName: 'Movie-Page' */
-  ),
+    './components/moviesPage/MoviesPage'),
 );
 
 const NotFound = lazy(() =>
-  import('./components/pages/NotFound' /* webpackChunkName: 'NotFound-Page' */),
+  import('./components/pages/NotFound'),
 );
 
 const container = {

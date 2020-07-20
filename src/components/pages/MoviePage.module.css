@@ -22,12 +22,12 @@
 }
 
 .button {
-    min-width: 100px;
+    width: 100%;
     font-family: inherit;
     appearance: none;
     border: 0;
     border-radius: 5px;
-    background: #4676d7;
+    background: #033caf;
     color: #fff;
     padding: 8px 16px;
     font-size: 1rem;
@@ -36,7 +36,7 @@
 }
 
 .button:hover {
-    background: #1d49aa;
+    background: #cecfd1;
 }
 
 .button:focus {

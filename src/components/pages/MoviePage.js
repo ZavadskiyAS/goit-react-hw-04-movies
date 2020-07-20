@@ -4,10 +4,10 @@ import { Route, Switch, withRouter } from 'react-router-dom';
 import Loader from './Loader';
 import styles from './MoviePage.module.css';
 
-const Cast = lazy(() => import('./Cast' /* webpackChunkName: 'Cast-Page' */));
+const Cast = lazy(() => import('./Cast'));
 
 const Reviews = lazy(() =>
-  import('./Reviews' /* webpackChunkName: 'Reviews-Page' */),
+  import('./Reviews'),
 );
 
 const imageUrl = 'https://image.tmdb.org/t/p/w500';
