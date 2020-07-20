@@ -1,21 +1,33 @@
-import React, {Component} from 'react';
-import { fetchMovies } from '../services/moviesApi';
-import MoviesList from '../moviesList/MoviesList';
+import React, { Component } from 'react';
+import { fetchTrending } from '../../services/Api';
+import HomePageList from '../pages/HomePageList';
 
 class HomePage extends Component {
-    state = { movies:[] };
-    componentDidMount() {
-        fetchMovies().then(data => this.setState({movies: data.result}));
+  state = {
+    movies: [],
+    message: null,
+  };
+
+  componentDidMount() {
+    this.fetchMovies();
+  }
+
+  fetchMovies = async () => {
+    try {
+      const movies = await fetchTrending();
+      this.setState({ movies: movies.data.results });
+    } catch (error) {
+      this.setState({ message: error });
     }
-    render() {
-        const { movies } = this.state;
-        return (
-            <div>
-                <h2>Trending today</h2>
-                <MoviesList movies={movies} />
-            </div>
-        );
-    }
+  };
+  render() {
+    const { movies } = this.state;
+    return (
+      <>
+        <HomePageList films={movies} />
+      </>
+    );
+  }
 }
 
 export default HomePage;

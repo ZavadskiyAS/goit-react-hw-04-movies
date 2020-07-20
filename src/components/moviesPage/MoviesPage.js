@@ -1,76 +1,80 @@
-import React, { Component } from 'react';
-
+import React, { Component, lazy, Suspense } from 'react';
 import queryString from 'query-string';
-import { fetchSearch } from '../services/moviesApi';
-import MoviesList from '../moviesList/MoviesList';
+import { fetchQueryMovies } from '../../services/Api';
+import Loader from '../pages/Loader';
+import styles from './MoviesPage.module.css';
 
-const getQueryFromLocation = location =>
-  queryString.parse(location.search).query;
+const MoviesPageList = lazy(() =>
+  import('../pages/MoviesPageList' /* webpackChunkName: 'Movies-Page-List' */),
+);
 
 class MoviesPage extends Component {
-  state = { query: '', movies: [] };
+  state = {
+    query: '',
+    message: null,
+    queryMovies: [],
+  };
 
   componentDidMount() {
-    const { location } = this.props;
-
-    const query = getQueryFromLocation(location);
-    if (query) {
-      fetchSearch(query).then(result =>
-        this.setState({ movies: result.data.results }),
+    if (this.props.location.search) {
+      const parsed = queryString.parse(this.props.location.search);
+      const query = parsed.query;
+      fetchQueryMovies(query).then(result =>
+        this.setState({ queryMovies: result.data.results, query }),
       );
     }
   }
 
-  componentDidUpdate(prevProps) {
-    const { location } = this.props;
-    const prevQuery = getQueryFromLocation(prevProps.location);
-    const nextQuery = getQueryFromLocation(location);
-    if (nextQuery !== prevQuery) {
-      if (nextQuery !== '' && nextQuery !== undefined) {
-        fetchSearch(nextQuery).then(result =>
-          this.setState({ movies: result.data.results }),
-        );
-      }
+  getQueryMovies = async () => {
+    try {
+      // const parsed = queryString.parse(this.props.history.location.search);
+      // const query = parsed.query;
+      const queryMovies = await fetchQueryMovies(
+        this.state.query,
+      ).then(result => this.setState({ queryMovies: result.data.results }));
+    } catch (error) {
+      this.setState({ message: error });
     }
-  }
-
-  handleChange = e =>
+  };
+  handleChange = e => {
     this.setState({
       query: e.target.value,
     });
+  };
 
   handleSubmit = e => {
     e.preventDefault();
-    if (this.state.query) {
+    const query = e.target.elements[0].value;
+    if (query) {
       this.props.history.push({
         ...this.props.location,
-        search: `query=${this.state.query}`,
+        search: `query=${query}`,
       });
     }
+    this.getQueryMovies(this.state.query);
   };
 
   render() {
-    const { location } = this.props;
-    const currentQuery = getQueryFromLocation(location);
-    const { query, movies } = this.state;
+    const { query, queryMovies } = this.state;
     return (
-      <div>
-        <form onSubmit={this.handleSubmit}>
-          <input
-            type="search"
-            placeholder="Search..."
-            autoComplete="off"
-            value={query}
-            onChange={this.handleChange}
-          />
-          <button type="submit">Search</button>
-        </form>
-        {currentQuery !== '' ? (
-          <MoviesList movies={movies} query={currentQuery} />
-        ) : (
-          <h2>Which movie do you want to find?</h2>
-        )}
-      </div>
+      <>
+        <div className={styles.Searchbar}>
+          <form className={styles.SearchForm} onSubmit={this.handleSubmit}>
+            <input
+              className={styles.SearchFormInput}
+              type="search"
+              placeholder="Search movies..."
+              autoComplete="off"
+              value={query}
+              onChange={this.handleChange}
+            />
+            <button className={styles.SearchFormButton} type="submit"></button>
+          </form>
+        </div>
+        <Suspense fallback={<Loader />}>
+          {query && <MoviesPageList query={query} films={queryMovies} />}
+        </Suspense>
+      </>
     );
   }
 }
